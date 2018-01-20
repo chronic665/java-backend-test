@@ -10,7 +10,7 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HooverTest {
+class HooverRoomSetupTest {
 
     private Hoover cut;
 
