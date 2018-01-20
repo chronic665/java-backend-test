@@ -28,15 +28,20 @@ public class Room {
         return patches;
     }
 
+    /**
+     * Checks if a given coordinate is dirty. Requests for tiles outside the room borders are responded as "clean"
+     * @param coords
+     * @return
+     */
     public boolean isDirty(Coords coords) {
         if(outOfBoundary(coords)) return false;
-        return patches.parallelStream()
+        long dirtyTileOnThisPosition = patches.parallelStream()
                 .filter(patch ->
                         patch.getCoords().getX() == coords.getX() &&
                                 patch.getCoords().getY() == coords.getY()
                 )
-                .collect(Collectors.toSet())
-                .isEmpty();
+                .count();
+        return dirtyTileOnThisPosition > 0;
     }
 
     /**
@@ -46,7 +51,7 @@ public class Room {
      */
     public boolean outOfBoundary(Coords coords) {
         return coords.getX() < 0 || coords.getY() < 0 ||
-                coords.getX() > dimensionX || coords.getY() > dimensionY;
+                coords.getX() >= dimensionX || coords.getY() >= dimensionY;
     }
 
     @Override
@@ -56,5 +61,13 @@ public class Room {
                 .add("dimensionY", dimensionY)
                 .add("patches", patches)
                 .toString();
+    }
+
+    /**
+     * Cleans a tile in the room
+     * @param position
+     */
+    public void cleanTile(final Coords position) {
+        this.patches.remove(new Patch(position));
     }
 }

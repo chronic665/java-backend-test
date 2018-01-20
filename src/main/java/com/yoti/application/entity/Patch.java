@@ -1,7 +1,5 @@
 package com.yoti.application.entity;
 
-import com.google.common.base.MoreObjects;
-
 import java.util.Objects;
 
 public class Patch {
@@ -25,7 +23,6 @@ public class Patch {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(coords);
     }
 

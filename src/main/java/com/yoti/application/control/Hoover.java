@@ -24,7 +24,7 @@ public class Hoover {
      * @return boolean Does the room need cleaning?
      */
     public boolean initializeRoom(final Room room) {
-        if(room == null || room.getDimensionX() < 0 || room.getDimensionY() < 0) {
+        if(room == null || room.getDimensionX() <= 0 || room.getDimensionY() <= 0) {
             throw new IllegalArgumentException("No valid room layout has been provided to the Hoover!");
         }
         this.room = room;
@@ -55,6 +55,12 @@ public class Hoover {
     }
 
     public void clean(Queue<Instruction> instructions) {
+        if(this.room == null) {
+            throw new IllegalStateException("Room has not been initialized!");
+        }
+        if(this.position == null) {
+            throw new IllegalStateException("Hoover was not placed in the room yet!");
+        }
         while(!instructions.isEmpty()) {
             final Instruction instruction = instructions.poll();
             final Coords destination = this.position.calculateCoords(instruction.getCoords());
@@ -67,8 +73,10 @@ public class Hoover {
     }
 
     private void cleanTile() {
-        this.room.getPatches().remove(this.position);
-        this.cleanedTiles++;
+        if(room.isDirty(this.position)) {
+            this.room.cleanTile(this.position);
+            this.cleanedTiles++;
+        }
     }
 
     private boolean moveTo(Coords destination) {

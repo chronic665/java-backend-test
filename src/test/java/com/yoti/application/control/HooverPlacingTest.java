@@ -1,7 +1,6 @@
 package com.yoti.application.control;
 
 import com.yoti.application.entity.Coords;
-import com.yoti.application.entity.Patch;
 import com.yoti.application.entity.Room;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

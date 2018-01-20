@@ -34,6 +34,16 @@ class HooverRoomSetupTest {
     }
 
     @Test
+    public void testRoomSetup_0dimensionsAreinvalid() {
+        final Room room = new Room(1, 0, new HashSet<>());
+        assertThrows(IllegalArgumentException.class, () -> cut.initializeRoom(room));
+        final Room room2 = new Room(0, 1, new HashSet<>());
+        assertThrows(IllegalArgumentException.class, () -> cut.initializeRoom(room2));
+        final Room room3 = new Room(0, 0, new HashSet<>());
+        assertThrows(IllegalArgumentException.class, () -> cut.initializeRoom(room3));
+    }
+
+    @Test
     public void testRoomSetup_nullPatchSetNeedsNoCleaning() {
         Room nullPatchRoom = new Room(1, 1, null);
         assertThat(cut.initializeRoom(nullPatchRoom), is(false));
@@ -60,23 +70,31 @@ class HooverRoomSetupTest {
 
     @Test
     public void testRoomSetup_onFieldRoomEmptyDoesntNeedCleaning() {
-        Room room = new Room(0, 0, new HashSet<>());
+        Room room = new Room(1, 1, new HashSet<>());
         assertThat(cut.initializeRoom(room), is(false));
     }
 
     @Test
     public void testRoomSetup_dirtyFieldNeedsCleaning() {
         HashSet<Patch> patches = new HashSet<>();
-        patches.add(new Patch(new Coords(1,1)));
+        patches.add(new Patch(new Coords(0,0)));
         Room room = new Room(1, 1, patches);
         assertThat(cut.initializeRoom(room), is(true));
     }
 
     @Test
-    public void testRoomSetup_dirtyFieldsOutsideBoundaryAreIgnored() {
+    public void testRoomSetup_outOfBounds() {
         HashSet<Patch> patches = new HashSet<>();
         patches.add(new Patch(new Coords(1,1)));
-        Room room = new Room(0, 0, patches);
+        Room room = new Room(1, 1, patches);
+        assertThat(cut.initializeRoom(room), is(false));
+    }
+
+    @Test
+    public void testRoomSetup_dirtyFieldsOutsideBoundaryAreIgnored() {
+        HashSet<Patch> patches = new HashSet<>();
+        patches.add(new Patch(new Coords(5,5)));
+        Room room = new Room(1, 2, patches);
         assertThat(cut.initializeRoom(room), is(false));
     }
 }
