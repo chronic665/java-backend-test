@@ -19,7 +19,7 @@ public class CleaningService {
         boolean requiresCleaning = hoover.initializeRoom(input.getRoom());
         if(requiresCleaning) {
             hoover.place(input.getBotCoords());
-            hoover.clean();
+            hoover.clean(input.getInstructions());
             return new ResultPage(hoover.getPosition(), hoover.getCleanedTiles());
         } else {
             return new ResultPage(new Coords(0,0), 0);

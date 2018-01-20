@@ -21,6 +21,10 @@ public class Coords {
         return y;
     }
 
+    public Coords calculateCoords(final Coords move) {
+        return new Coords(this.x + move.getX(), this.y + move.getY());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,10 +1,13 @@
 package com.yoti.application.control;
 
 import com.yoti.application.entity.Coords;
+import com.yoti.application.entity.Instruction;
 import com.yoti.application.entity.Room;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.Queue;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -51,23 +54,38 @@ public class Hoover {
         this.position = botCoords;
     }
 
-    public void clean() {
-        throw new RuntimeException("Not implemented yet!");
+    public void clean(Queue<Instruction> instructions) {
+        while(!instructions.isEmpty()) {
+            final Instruction instruction = instructions.poll();
+            final Coords destination = this.position.calculateCoords(instruction.getCoords());
+            boolean moved = this.moveTo(destination);
+            // we only really need to clean if we moved
+            if(moved) {
+                this.cleanTile();
+            }
+        }
+    }
+
+    private void cleanTile() {
+        this.room.getPatches().remove(this.position);
+        this.cleanedTiles++;
+    }
+
+    private boolean moveTo(Coords destination) {
+        if(!room.outOfBoundary(destination)) {
+            this.position = destination;
+            return true;
+        }
+        return false;
     }
 
     public Coords getPosition() {
         return position;
     }
 
-    public void setPosition(Coords position) {
-        this.position = position;
-    }
 
     public int getCleanedTiles() {
         return cleanedTiles;
     }
 
-    public void setCleanedTiles(int cleanedTiles) {
-        this.cleanedTiles = cleanedTiles;
-    }
 }
