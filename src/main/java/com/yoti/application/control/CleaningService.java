@@ -22,7 +22,7 @@ public class CleaningService {
             hoover.clean(input.getInstructions());
             return new ResultPage(hoover.getPosition(), hoover.getCleanedTiles());
         } else {
-            return new ResultPage(new Coords(0,0), 0);
+            return new ResultPage(input.getBotCoords(), 0);
         }
     }
 }

@@ -58,7 +58,7 @@ public class RoomInput {
             return this;
         }
         public RoomInput build() {
-            if(roomToBuild == null || botCoordsToBuild == null || instructionsToBuild == null || instructionsToBuild.isEmpty())
+            if(roomToBuild == null || botCoordsToBuild == null || instructionsToBuild == null)
                 throw new RuntimeException("RoomBuilder was not given enough information to build a room");
             return new RoomInput(roomToBuild, botCoordsToBuild, new LinkedList<>(instructionsToBuild));
         }
