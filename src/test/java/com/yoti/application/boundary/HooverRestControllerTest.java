@@ -45,5 +45,13 @@ class HooverRestControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
         ;
+        mockMvc.perform(post("/")
+                    .content(MOCK_PAYLOAD)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
     }
 }

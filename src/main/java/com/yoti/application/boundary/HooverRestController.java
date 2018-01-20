@@ -27,6 +27,7 @@ public class HooverRestController {
 
     @PostMapping
     public ResultPage clean(@RequestBody final RoomInputDTO input) {
+        cleaningService.clean(conversionService.convert(input, RoomInput.class));
         return cleaningService.clean(conversionService.convert(input, RoomInput.class));
     }
 }
