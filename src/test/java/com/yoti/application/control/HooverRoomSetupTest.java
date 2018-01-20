@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HooverRoomSetupTest {
 
@@ -32,42 +34,49 @@ class HooverRoomSetupTest {
     }
 
     @Test
-    public void testRoomSetup_nullPatchSet() {
-        Room illegalRoomNoPatches = new Room(1, 1, null);
-        assertThrows(IllegalArgumentException.class, () -> cut.initializeRoom(illegalRoomNoPatches));
+    public void testRoomSetup_nullPatchSetNeedsNoCleaning() {
+        Room nullPatchRoom = new Room(1, 1, null);
+        assertThat(cut.initializeRoom(nullPatchRoom), is(false));
     }
 
     @Test
-    public void testRoomSetup_cleanFieldIsValid() {
-        Room room = new Room(1, 1, new HashSet<>());
-        cut.initializeRoom(room);
-    }
-
-    @Test
-    public void testRoomSetup_onFieldRoomIsValid() {
-        Room room = new Room(0, 0, new HashSet<>());
-        cut.initializeRoom(room);
-    }
-
-    @Test
-    public void testRoomSetup_dirtyFieldIsValid() {
-        HashSet<Patch> patches = new HashSet<>();
-        patches.add(new Patch(new Coords(1,1)));
-        Room room = new Room(1, 1, patches);
-        cut.initializeRoom(room);
-    }
-
-    @Test
-    public void testRoomSetup_nullPatchEntriesAreInvalid() {
+    public void testRoomSetup_badPatchEntriesAreIgnored() {
         HashSet<Patch> nullPatches = new HashSet<>();
         nullPatches.add(null);
         Room nullPatchRoom = new Room(1, 1, nullPatches);
-        assertThrows(IllegalArgumentException.class, () -> cut.initializeRoom(nullPatchRoom));
+        assertThat(cut.initializeRoom(nullPatchRoom), is(false));
 
         HashSet<Patch> nullCoords = new HashSet<>();
         nullCoords.add(new Patch(null));
         Room nullCoordsRoom = new Room(1, 1, nullCoords);
-        cut.initializeRoom(nullCoordsRoom);
+        assertThat(cut.initializeRoom(nullCoordsRoom), is(false));
     }
 
+    @Test
+    public void testRoomSetup_EmptyRoomDoesntNeedCleaning() {
+        Room room = new Room(1, 1, new HashSet<>());
+        assertThat(cut.initializeRoom(room), is(false));
+    }
+
+    @Test
+    public void testRoomSetup_onFieldRoomEmptyDoesntNeedCleaning() {
+        Room room = new Room(0, 0, new HashSet<>());
+        assertThat(cut.initializeRoom(room), is(false));
+    }
+
+    @Test
+    public void testRoomSetup_dirtyFieldNeedsCleaning() {
+        HashSet<Patch> patches = new HashSet<>();
+        patches.add(new Patch(new Coords(1,1)));
+        Room room = new Room(1, 1, patches);
+        assertThat(cut.initializeRoom(room), is(true));
+    }
+
+    @Test
+    public void testRoomSetup_dirtyFieldsOutsideBoundaryAreIgnored() {
+        HashSet<Patch> patches = new HashSet<>();
+        patches.add(new Patch(new Coords(1,1)));
+        Room room = new Room(0, 0, patches);
+        assertThat(cut.initializeRoom(room), is(false));
+    }
 }

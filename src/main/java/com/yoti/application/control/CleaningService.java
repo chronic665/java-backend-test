@@ -1,6 +1,7 @@
 package com.yoti.application.control;
 
 import com.yoti.application.dto.ResultPage;
+import com.yoti.application.entity.Coords;
 import com.yoti.application.entity.RoomInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,13 @@ public class CleaningService {
 
     public ResultPage clean(RoomInput input) {
         Hoover hoover = this.hoover.get();
-        hoover.initializeRoom(input.getRoom());
-        hoover.place(input.getBotCoords());
-        hoover.clean();
-        return new ResultPage(hoover.getPosition(), hoover.getCleanedTiles());
+        boolean requiresCleaning = hoover.initializeRoom(input.getRoom());
+        if(requiresCleaning) {
+            hoover.place(input.getBotCoords());
+            hoover.clean();
+            return new ResultPage(hoover.getPosition(), hoover.getCleanedTiles());
+        } else {
+            return new ResultPage(new Coords(0,0), 0);
+        }
     }
 }
