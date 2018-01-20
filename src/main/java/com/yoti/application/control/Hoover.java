@@ -41,8 +41,14 @@ public class Hoover {
         }
     }
 
-    public void place(Coords botCoords) {
-        throw new RuntimeException("Not implemented yet!");
+    public void place(final Coords botCoords) {
+        if(room == null) {
+            throw new IllegalStateException("Room has not been initialized!");
+        }
+        if(botCoords == null || room.outOfBoundary(botCoords)) {
+            throw new IllegalArgumentException("Hoover was placed outside the grid!");
+        }
+        this.position = botCoords;
     }
 
     public void clean() {

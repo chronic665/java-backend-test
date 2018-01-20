@@ -21,16 +21,19 @@ class HooverPlacingTest {
 
     @Test
     public void testPlacement_illegalCoordsNull() {
+        cut.initializeRoom(new Room(1, 1, new HashSet<>()));
         assertThrows(IllegalArgumentException.class, () -> cut.place(null));
     }
 
     @Test
     public void testPlacement_illegalCoordsX() {
+        cut.initializeRoom(new Room(1, 1, new HashSet<>()));
         assertThrows(IllegalArgumentException.class, () -> cut.place(new Coords(-1, 0)));
     }
 
     @Test
     public void testPlacement_illegalCoordsY() {
+        cut.initializeRoom(new Room(1, 1, new HashSet<>()));
         assertThrows(IllegalArgumentException.class, () -> cut.place(new Coords(0, -1)));
     }
 

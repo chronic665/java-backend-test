@@ -39,8 +39,14 @@ public class Room {
                 .isEmpty();
     }
 
+    /**
+     * Checks if the given coordinates are inside the room
+     * @param coords
+     * @return
+     */
     public boolean outOfBoundary(Coords coords) {
-        return coords.getX() > dimensionX || coords.getY() > dimensionY;
+        return coords.getX() < 0 || coords.getY() < 0 ||
+                coords.getX() > dimensionX || coords.getY() > dimensionY;
     }
 
     @Override
