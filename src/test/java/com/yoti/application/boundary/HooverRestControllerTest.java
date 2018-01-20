@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class R2D2RestControllerTest {
+class HooverRestControllerTest {
 
     private final String MOCK_PAYLOAD = new StringBuilder("{")
             .append("\"roomSize\" : [5, 5],")
