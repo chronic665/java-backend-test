@@ -1,6 +1,5 @@
 package com.yoti.application;
 
-import com.yoti.application.control.CleaningService;
 import com.yoti.application.converter.InputConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
