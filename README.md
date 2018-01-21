@@ -22,37 +22,52 @@ All examples in this file use the [HTTPie](https://httpie.org/) library, because
 
 Program input will be received as a HTTP POST request with a json payload with the format described here.
 
-Example:
+Structure:
 
 ```javascript
 {
-  "roomSize" : [5, 5],
-  "coords" : [1, 2],
-  "patches" : [
-    [1, 0],
-    [2, 2],
-    [2, 3]
-  ],
-  "instructions" : "NNESEESWNWW"
+  "roomSize" : int[],
+  "coords" : int[],
+  "patches" : [int[]],
+  "instructions" : string
 }
-```
-Example request:
-```shell
-http post http://localhost:8080/ roomSize:='[5, 5]' coords:='[1,2]' patches:='[[1,0], [2,2], [2,3]]' instructions="NNESEESWNWW"
 ```
 
 ## Output
 
-Service output is returned as a json payload.
-
-Example (matching the input above):
-
+Service output is returned as a json payload with the following structure.
 ```javascript
 {
-  "coords" : [1, 3],
-  "patches" : 1
+  "coords" : int[],
+  "patches" : int
 }
 ```
+
+## Example
+
+Example request:
+```shell
+http post http://localhost:8080/ roomSize:='[5, 5]' \ 
+        coords:='[1,2]' patches:='[[1,0], [2,2], [2,3]]' \
+        instructions="NNESEESWNWW"
+```
+Response:
+```
+HTTP/1.1 200 
+Content-Type: application/json;charset=UTF-8
+Date: Sun, 21 Jan 2018 23:07:48 GMT
+Transfer-Encoding: chunked
+
+{
+    "coords": [
+        1,
+        3
+    ],
+    "patches": 1
+}
+
+```
+
 Where `coords` are the final coordinates of the hoover and `patches` is the number of cleaned patches.
 
 ## Deliverable
@@ -99,5 +114,82 @@ This endpoint is provided by Spring Data REST in a HAL format. The data can be r
 ```
 http get http://localhost:8080/history
 ```
+Output:
+```javascript                                                                                   
+HTTP/1.1 200 
+Content-Type: application/hal+json;charset=UTF-8
+Date: Sun, 21 Jan 2018 23:07:58 GMT
+Transfer-Encoding: chunked
+
+{
+    "_embedded": {
+        "history": [
+            {
+                "_links": {
+                    "roomCleaning": {
+                        "href": "http://localhost:8080/history/ac442855-96a8-4403-af9d-3d94d9ec477b"
+                    },
+                    "self": {
+                        "href": "http://localhost:8080/history/ac442855-96a8-4403-af9d-3d94d9ec477b"
+                    }
+                },
+                "input": {
+                    "botCoords": {
+                        "x": 1,
+                        "y": 2
+                    },
+                    "instructions": [],
+                    "room": {
+                        "dimensionX": 5,
+                        "dimensionY": 5,
+                        "patches": [
+                            {
+                                "coords": {
+                                    "x": 2,
+                                    "y": 2
+                                }
+                            },
+                            {
+                                "coords": {
+                                    "x": 1,
+                                    "y": 0
+                                }
+                            }
+                        ]
+                    }
+                },
+                "output": {
+                    "cleanedTiles": 1,
+                    "position": {
+                        "x": 1,
+                        "y": 3
+                    }
+                },
+                "timestamp": 1516576068696
+            }
+        ]
+    },
+    "_links": {
+        "profile": {
+            "href": "http://localhost:8080/profile/history"
+        },
+        "self": {
+            "href": "http://localhost:8080/history{?page,size,sort}",
+            "templated": true
+        }
+    },
+    "page": {
+        "number": 0,
+        "size": 20,
+        "totalElements": 1,
+        "totalPages": 1
+    }
+}
+
+```
 **Warning** As this is a default Spring Data REST endpoint, it is possible to manipulate the data through POST and PUT requests.
 
+Due to a lack of a more detailed specification, the persistence profile will just push the Input and Output data into MongoDB after
+Edward cleaned the room according to his instructions. A possible improvement could be to persist the RequestInput data on each
+iteration of the cleaning cycle. The service could then recover after an interuption of the cleaning process and return
+to cleaning according to the rest of the instructions in the queue. 
