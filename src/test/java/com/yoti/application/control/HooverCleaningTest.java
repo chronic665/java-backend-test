@@ -3,34 +3,33 @@ package com.yoti.application.control;
 import com.yoti.application.entity.Coords;
 import com.yoti.application.entity.Patch;
 import com.yoti.application.entity.Room;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.*;
 
 import static com.yoti.application.entity.Instruction.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 
-class HooverCleaningTest {
+public class HooverCleaningTest {
 
     private Hoover cut;
 
-    @BeforeEach
+    @Before
     public void setup() {
         this.cut = new Hoover();
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void roomNotInitializedThrowException() {
-        assertThrows(IllegalStateException.class, () -> cut.clean(new LinkedList<>(Collections.emptyList())));
+        cut.clean(new LinkedList<>(Collections.emptyList()));
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void botNotPlacedThrowException() {
         initCleanRoom();
-        assertThrows(IllegalStateException.class, () -> cut.clean(new LinkedList<>(Collections.emptyList())));
+        cut.clean(new LinkedList<>(Collections.emptyList()));
     }
 
     private void initCleanRoom() {
@@ -131,7 +130,7 @@ class HooverCleaningTest {
     }
 
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testNullInstructionsRaiseException() {
         Set<Patch> patches = new HashSet<>();
         patches.add(new Patch(new Coords(0,0)));
@@ -139,7 +138,7 @@ class HooverCleaningTest {
         cut.initializeRoom(room);
         cut.place(new Coords(0,0));
 
-        assertThrows(IllegalArgumentException.class, () -> cut.clean(null));
+        cut.clean(null);
     }
 
 

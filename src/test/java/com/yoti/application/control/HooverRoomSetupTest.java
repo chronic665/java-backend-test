@@ -3,44 +3,51 @@ package com.yoti.application.control;
 import com.yoti.application.entity.Coords;
 import com.yoti.application.entity.Patch;
 import com.yoti.application.entity.Room;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.HashSet;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class HooverRoomSetupTest {
+public class HooverRoomSetupTest {
 
     private Hoover cut;
 
-    @BeforeEach
+    @Before
     public void setup() {
         this.cut = new Hoover();
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testRoomSetup_illegalXCoordinate() {
         Room illegalRoomXCoordinate = new Room(1, -1, new HashSet<>());
-        assertThrows(IllegalArgumentException.class, () -> cut.initializeRoom(illegalRoomXCoordinate));
+        cut.initializeRoom(illegalRoomXCoordinate);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testRoomSetup_illegalYCoordinate() {
         Room illegalRoomYCoordinate = new Room(-1, 1, new HashSet<>());
-        assertThrows(IllegalArgumentException.class, () -> cut.initializeRoom(illegalRoomYCoordinate));
+        cut.initializeRoom(illegalRoomYCoordinate);
     }
 
-    @Test
-    public void testRoomSetup_0dimensionsAreinvalid() {
+    @Test(expected = IllegalArgumentException.class)
+    public void testRoomSetup_0dimensionsAreinvalidY() {
         final Room room = new Room(1, 0, new HashSet<>());
-        assertThrows(IllegalArgumentException.class, () -> cut.initializeRoom(room));
-        final Room room2 = new Room(0, 1, new HashSet<>());
-        assertThrows(IllegalArgumentException.class, () -> cut.initializeRoom(room2));
-        final Room room3 = new Room(0, 0, new HashSet<>());
-        assertThrows(IllegalArgumentException.class, () -> cut.initializeRoom(room3));
+        cut.initializeRoom(room);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRoomSetup_0dimensionsAreinvalidX() {
+        final Room room = new Room(0, 1, new HashSet<>());
+        cut.initializeRoom(room);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRoomSetup_0dimensionsAreinvalidBoth() {
+        final Room room = new Room(0, 0, new HashSet<>());
+        cut.initializeRoom(room);
     }
 
     @Test
