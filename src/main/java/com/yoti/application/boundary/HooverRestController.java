@@ -2,6 +2,7 @@ package com.yoti.application.boundary;
 
 import com.yoti.application.control.CleaningService;
 import com.yoti.application.dto.ResultPage;
+import com.yoti.application.dto.ResultPageDTO;
 import com.yoti.application.dto.RoomInputDTO;
 import com.yoti.application.entity.RoomInput;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,10 @@ public class HooverRestController {
     }
 
     @PostMapping
-    public ResultPage clean(@RequestBody final RoomInputDTO input) {
-        return cleaningService.clean(conversionService.convert(input, RoomInput.class));
+    public ResultPageDTO clean(@RequestBody final RoomInputDTO input) {
+        return conversionService.convert(
+                cleaningService.clean(conversionService.convert(input, RoomInput.class)),
+                ResultPageDTO.class)
+                ;
     }
 }

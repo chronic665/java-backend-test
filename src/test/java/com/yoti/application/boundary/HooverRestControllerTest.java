@@ -9,9 +9,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -19,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class HooverRestControllerTest {
 
-    private final String MOCK_PAYLOAD = new StringBuilder("{")
+    private final String EXAMPLE_PAYLOAD = new StringBuilder("{")
             .append("\"roomSize\" : [5, 5],")
             .append("\"coords\" : [1, 2],")
             .append("\"patches\" : [")
@@ -35,14 +37,16 @@ class HooverRestControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void test() throws Exception {
+    public void testExample() throws Exception {
         mockMvc.perform(post("/")
-                    .content(MOCK_PAYLOAD)
+                    .content(EXAMPLE_PAYLOAD)
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .accept(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().json("{\"coords\":[1,3],\"patches\":1}"))
         ;
     }
 }
