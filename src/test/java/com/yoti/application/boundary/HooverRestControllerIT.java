@@ -44,6 +44,16 @@ class HooverRestControllerIT {
             .append("}")
             .toString();
 
+    private final String NO_INSTRUCTIONS_INPUT = new StringBuilder("{")
+            .append("\"roomSize\" : [5, 5],")
+            .append("\"coords\": [2, 1],")
+            .append("\"patches\" : [")
+            .append("[3, 0],")
+            .append("[4, 1]")
+            .append("]")
+            .append("}")
+            .toString();
+
     private final String ILLEGAL_ROOM_PAYLOAD_MINUS= new StringBuilder("{")
             .append("\"roomSize\" : [-1, -1],")
             .append("\"coords\": [2, 1],")
@@ -65,6 +75,12 @@ class HooverRestControllerIT {
             .append("}")
             .toString();
 
+    private final String NO_PATCHES_INPUT = new StringBuilder("{")
+            .append("\"roomSize\" : [5, 5],")
+            .append("\"coords\": [2, 1],")
+            .append("\"instructions\" : \"SSESNEESNN\"")
+            .append("}")
+            .toString();
     @Autowired
     private MockMvc mockMvc;
 
@@ -119,4 +135,34 @@ class HooverRestControllerIT {
                 .andExpect(status().isBadRequest())
         ;
     }
+
+    @Test
+    public void testNoPatchesInput() throws Exception {
+        mockMvc.perform(post("/")
+                .content(NO_PATCHES_INPUT)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().json("{\"coords\":[2,1],\"patches\":0}"))
+        ;
+    }
+
+
+    @Test
+    public void testNoInstructions() throws Exception {
+        mockMvc.perform(post("/")
+                .content(NO_INSTRUCTIONS_INPUT)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().json("{\"coords\":[2,1],\"patches\":0}"))
+        ;
+    }
+
 }

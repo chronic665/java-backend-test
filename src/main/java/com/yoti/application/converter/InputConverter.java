@@ -13,15 +13,10 @@ import java.util.stream.Collectors;
 @Component
 public class InputConverter implements Converter<RoomInputDTO, RoomInput> {
 
-    @PostConstruct
-    public void postConstruct() {
-        // TODO register with ConversionService
-    }
-
     @Override
-    public RoomInput convert(RoomInputDTO source) {
+    public RoomInput convert(final RoomInputDTO source) {
 
-        RoomInput.RoomInputBuilder builder = new RoomInput.RoomInputBuilder();
+        final RoomInput.RoomInputBuilder builder = new RoomInput.RoomInputBuilder();
 
         builder.withBotAt(convertCoords(source.getCoords()))
                 .withInstructions(convertInstructions(source.getInstructions()))
@@ -31,19 +26,20 @@ public class InputConverter implements Converter<RoomInputDTO, RoomInput> {
     }
 
     private Room convertRoom(int[] roomSize, List<Integer[]> patches) {
-        Coords roomCoords = convertCoords(roomSize);
-        Room room = new Room(roomCoords.getX(), roomCoords.getY(), convertPatches(patches));
-        return room;
+        final Coords roomCoords = convertCoords(roomSize);
+        return new Room(roomCoords.getX(), roomCoords.getY(), convertPatches(patches));
     }
 
-    private Set<Patch> convertPatches(List<Integer[]> patches) {
+    private Set<Patch> convertPatches(final List<Integer[]> patches) {
+        if(patches == null || patches.isEmpty()) return Collections.emptySet();
         return patches.stream()
                 .map(patch -> new Patch(convertCoords(patch)))
                 .collect(Collectors.toSet());
     }
 
 
-    private List<Instruction> convertInstructions(String instructions) {
+    private List<Instruction> convertInstructions(final String instructions) {
+        if(null == instructions) return Collections.emptyList();
         final List<Instruction> result = new ArrayList<>();
         for (char c : instructions.toCharArray()) {
             result.add(Instruction.forLiteral(String.valueOf(c)));
@@ -51,14 +47,14 @@ public class InputConverter implements Converter<RoomInputDTO, RoomInput> {
         return result;
     }
 
-    private Coords convertCoords(int[] coords) {
+    private Coords convertCoords(final int[] coords) {
         if(null == coords || coords.length < 2 || coords[0] < 0 || coords[1] < 0) {
             throw new IllegalCoordinatesException("Given coords '" + print(coords) + "' are not valid!");
         }
         return new Coords(coords[0], coords[1]);
     }
 
-    private String print(int[] coords) {
+    private String print(final int[] coords) {
         if(null == coords) return "[null]";
         final StringBuilder sb = new StringBuilder("[");
         for (int index = 0; index < coords.length; index++) {
@@ -69,7 +65,7 @@ public class InputConverter implements Converter<RoomInputDTO, RoomInput> {
         return sb.toString();
     }
 
-    private Coords convertCoords(Integer[] coords) {
+    private Coords convertCoords(final Integer[] coords) {
         return convertCoords(new int[]{coords[0], coords[1]});
     }
 
