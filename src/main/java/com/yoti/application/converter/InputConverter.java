@@ -2,6 +2,7 @@ package com.yoti.application.converter;
 
 import com.yoti.application.dto.RoomInputDTO;
 import com.yoti.application.entity.*;
+import com.yoti.application.exception.IllegalCoordinatesException;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -52,9 +53,20 @@ public class InputConverter implements Converter<RoomInputDTO, RoomInput> {
 
     private Coords convertCoords(int[] coords) {
         if(null == coords || coords.length < 2 || coords[0] < 0 || coords[1] < 0) {
-            throw new IllegalArgumentException("Given coords '" + coords + "' are not valid!");
+            throw new IllegalCoordinatesException("Given coords '" + print(coords) + "' are not valid!");
         }
         return new Coords(coords[0], coords[1]);
+    }
+
+    private String print(int[] coords) {
+        if(null == coords) return "[null]";
+        final StringBuilder sb = new StringBuilder("[");
+        for (int index = 0; index < coords.length; index++) {
+            sb.append(coords[index]);
+            if(index < coords.length) sb.append(",");
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     private Coords convertCoords(Integer[] coords) {

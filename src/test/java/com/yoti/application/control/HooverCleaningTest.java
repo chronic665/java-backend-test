@@ -78,13 +78,12 @@ class HooverCleaningTest {
     /*
         {
           "roomSize" : [5, 5],
-          "coords" : [1, 2],
+          "coords" : [2, 1],
           "patches" : [
-            [1, 0],
-            [2, 2],
-            [2, 3]
+            [3, 0],
+            [4, 1]
           ],
-          "instructions" : "NNESEESWNWW"
+          "instructions" : "SSESNEESNN"
         }
      */
     @Test

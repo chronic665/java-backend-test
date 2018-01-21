@@ -1,10 +1,16 @@
 package com.yoti.application.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class RoomInputDTO {
 
+    @NotEmpty
+    @NotNull
     private int[] roomSize;
+    @NotEmpty
+    @NotNull
     private int[] coords;
     private List<Integer[]> patches;
     private String instructions;
