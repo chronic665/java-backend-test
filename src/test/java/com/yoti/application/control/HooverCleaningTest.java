@@ -118,7 +118,7 @@ class HooverCleaningTest {
     }
 
     @Test
-    public void testOnlyDirtyTileIsStrart() {
+    public void testOnlyDirtyTileIsAtStart() {
         Set<Patch> patches = new HashSet<>();
         patches.add(new Patch(new Coords(0,0)));
         Room room = new Room(1,2, patches);
@@ -129,6 +129,18 @@ class HooverCleaningTest {
 
         assertThat(cut.getCleanedTiles(), is(1));
         assertThat(cut.getPosition(), is(new Coords(0,1)));
+    }
+
+
+    @Test
+    public void testNullInstructionsRaiseException() {
+        Set<Patch> patches = new HashSet<>();
+        patches.add(new Patch(new Coords(0,0)));
+        Room room = new Room(1,2, patches);
+        cut.initializeRoom(room);
+        cut.place(new Coords(0,0));
+
+        assertThrows(IllegalArgumentException.class, () -> cut.clean(null));
     }
 
 

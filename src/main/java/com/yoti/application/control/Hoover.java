@@ -44,6 +44,11 @@ public class Hoover {
         }
     }
 
+    /**
+     * Place the Hoover in the room. <br />
+     * Requires that the Hoover has {@link Hoover#initializeRoom(Room) initialized} the room.
+     * @param botCoords Coords the Hoover should be placed. Coords must be within the boundaries of the room.
+     */
     public void place(final Coords botCoords) {
         if(room == null) {
             throw new IllegalStateException("Room has not been initialized!");
@@ -54,12 +59,21 @@ public class Hoover {
         this.position = botCoords;
     }
 
+    /**
+     * Order the Hoover to clean the room. <br />
+     * Requires that the room has been {@link Hoover#initializeRoom(Room) initialized} and the Hoover has
+     * been {@link Hoover#place(Coords)}  placed} in the room.
+     * @param instructions Queue of Instructions that the Hoover should follow
+     */
     public void clean(Queue<Instruction> instructions) {
-        if(this.room == null) {
+        if (this.room == null) {
             throw new IllegalStateException("Room has not been initialized!");
         }
-        if(this.position == null) {
+        if (this.position == null) {
             throw new IllegalStateException("Hoover was not placed in the room yet!");
+        }
+        if (instructions == null) {
+            throw new IllegalArgumentException("Instructions must not be null!");
         }
         // initial tile
         if(!room.outOfBoundary(this.position)) {
