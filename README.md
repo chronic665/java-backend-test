@@ -33,15 +33,14 @@ Example:
   "instructions" : "NNESEESWNWW"
 }
 ```
-
+Example request:
+```shell
+http post http://localhost:8080/ roomSize:='[5, 5]' coords:='[1,2]' patches:='[[1,0], [2,2], [2,3]]' instructions="NNESEESWNWW"
 ```
-
-```
-
 
 ## Output
 
-Service output should be returned as a json payload.
+Service output is returned as a json payload.
 
 Example (matching the input above):
 
@@ -58,27 +57,45 @@ Moreover, the services persists every input and output to a database.
 
 The service:
 
-* is a web service
-* must run on Mac OS X or Linux (x86-64) 
-* must be written in Java
-* can make use of any existing open source libraries that don't directly address the problem statement (use your best judgement).
+* is a Spring Boot powered web service
+* requires Java 8 (to run) and Maven (to build) 
+* has two Spring profiles: 'default' and 'mongodb'
+    * default does not persist any data
+    * mongodb starts an embedded MongoDB with the service (for convenience) and persists all request and response data, together with a timestamp. **As the database is embedded all persisted data will be lost when you stop the service!** 
 
-Send us:
+## Building and running the service
+### Running the service directly from source
+```
+# non persistent version:
+mvn spring-boot:run
 
-* The full source code, including any code written which is not part of the normal program run (scripts, tests)
-* Clear instructions on how to obtain and run the program
-* Please provide any deliverables and instructions using a public Github (or similar) Repository as several people will need to inspect the solution
+# persistent version
+mvn spring-boot:run -Dspring.profiles.active=mongodb
+```
 
-## Evaluation
+### Packaging the app and running it
+```
+mvn clean package
+# runnable jar lies at ./target/hoover.jar
+java -jar ./target/hoover.jar
 
-The point of the exercise is for us to see some of the code you wrote (and should be proud of). 
+# with persistence
+java -jar -Dspring.profiles.active=mongodb ./target/hoover.jar
+```
 
-We will especially consider:
+## Persistence profile
 
-* Code organisation
-* Quality
-* Readability
-* Actually solving the problem
+The persistence can be activated by running the service with the 'mongodb' profile (see Building and Running). 
+The service will then start an embedded MongoDB server that will live as long as the service is running. This is
+no solution for a production deployment, but brings the convenience of being able to run the service as a standalone app.
 
+While the service is running all normal MongoDB clients can be used to access the database and it's data. The port the database
+is listening to can be found in the startup output of the app.
 
-This test is based on the following gist https://gist.github.com/alirussell/9a519e07128b7eafcb50
+For extra convenience, when run in the 'mongodb' profile, the app also provides a REST endpoint to access the MongoDB data. 
+This endpoint is provided by Spring Data REST in a HAL format. The data can be retrieved under:
+```
+http get http://localhost:8080/history
+```
+**Warning** As this is a default Spring Data REST endpoint, it is possible to manipulate the data through POST and PUT requests.
+

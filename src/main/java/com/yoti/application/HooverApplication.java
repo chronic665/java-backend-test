@@ -3,6 +3,7 @@ package com.yoti.application;
 import com.yoti.application.converter.InputConverter;
 import com.yoti.application.converter.ResultPageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.ConversionService;
@@ -22,5 +23,9 @@ public class HooverApplication {
         cs.addConverter(inputConverter);
         cs.addConverter(resultPageConverter);
         return cs;
+    }
+
+    public static void main(String... args) {
+        SpringApplication.run(HooverApplication.class);
     }
 }
