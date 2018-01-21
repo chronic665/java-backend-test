@@ -61,6 +61,11 @@ public class Hoover {
         if(this.position == null) {
             throw new IllegalStateException("Hoover was not placed in the room yet!");
         }
+        // initial tile
+        if(!room.outOfBoundary(this.position)) {
+            this.cleanTile();
+        }
+        // clean rest of the room
         while(!instructions.isEmpty()) {
             final Instruction instruction = instructions.poll();
             final Coords destination = this.position.calculateCoords(instruction.getCoords());

@@ -117,5 +117,19 @@ class HooverCleaningTest {
         assertThat(cut.getPosition(), is(new Coords(2,1)));
     }
 
+    @Test
+    public void testOnlyDirtyTileIsStrart() {
+        Set<Patch> patches = new HashSet<>();
+        patches.add(new Patch(new Coords(0,0)));
+        Room room = new Room(1,2, patches);
+        cut.initializeRoom(room);
+        cut.place(new Coords(0,0));
+
+        cut.clean(new LinkedList<>(Arrays.asList(NORTH)));
+
+        assertThat(cut.getCleanedTiles(), is(1));
+        assertThat(cut.getPosition(), is(new Coords(0,1)));
+    }
+
 
 }
