@@ -5,14 +5,15 @@ import com.yoti.application.dto.ResultPage;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
-@Document
+@Document(collection = "cleanings")
 public class RoomCleaning {
     @Id
     private String _id;
-    private RoomInput input;
+    private RoomInputEntity input;
     private ResultPage output;
     private long timestamp;
 
@@ -21,7 +22,8 @@ public class RoomCleaning {
 
     public RoomCleaning(RoomInput input, ResultPage output, long timestamp) {
         this._id = UUID.randomUUID().toString();
-        this.input = input;
+        // Spring Data MongoDB does not support DataType "Queue"
+        this.input = new RoomInputEntity(input.getRoom(), input.getBotCoords(), new ArrayList<>(input.getInstructions()));
         this.output = output;
         this.timestamp = timestamp;
     }
@@ -34,11 +36,11 @@ public class RoomCleaning {
         this._id = _id;
     }
 
-    public RoomInput getInput() {
+    public RoomInputEntity getInput() {
         return input;
     }
 
-    public void setInput(RoomInput input) {
+    public void setInput(RoomInputEntity input) {
         this.input = input;
     }
 
