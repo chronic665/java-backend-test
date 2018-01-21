@@ -1,6 +1,6 @@
 ## Introduction
 
-Cleaning your room has never been easier. Forget old hoover models like like [Roomba](https://en.wikipedia.org/wiki/Roomba). With Edward J. Hoover you're room is finally home to real IoT.
+Cleaning your room has never been easier. Forget old hoover models like like [Roomba](https://en.wikipedia.org/wiki/Roomba). With Edward J. (for Java) Hoover you're room is finally home to real IoT.
 
 Some rules that your amazing Edward will adhere to:
 
@@ -14,6 +14,9 @@ The room will be rectangular, has no obstacles (except the room walls), no doors
 Placing the hoover on a patch of dirt ("hoovering") removes the patch of dirt so that patch is then clean for the remainder of the program run. The hoover is always on - there is no need to enable it.
 
 Driving into a wall has no effect (the robot skids in place).
+
+## Examples
+All examples in this file use the [HTTPie](https://httpie.org/) library, because of it's great readability. Any HTTP client that can send POST requests, e.g. cUrl or Postman can be used as well.
 
 ## Input
 
@@ -51,7 +54,6 @@ Example (matching the input above):
 }
 ```
 Where `coords` are the final coordinates of the hoover and `patches` is the number of cleaned patches.
-Moreover, the services persists every input and output to a database.
 
 ## Deliverable
 
