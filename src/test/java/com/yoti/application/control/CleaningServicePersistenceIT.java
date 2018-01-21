@@ -6,13 +6,12 @@ import com.yoti.application.entity.Room;
 import com.yoti.application.entity.RoomCleaning;
 import com.yoti.application.entity.RoomInput;
 import com.yoti.application.repo.RoomCleaningRepository;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,10 +20,10 @@ import static com.yoti.application.config.PersistenceConfig.PERSISTENCE_PROFILE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-@ExtendWith(SpringExtension.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ActiveProfiles(PERSISTENCE_PROFILE)
-class CleaningServicePersistenceIT {
+public class CleaningServicePersistenceIT {
 
     @Autowired
     private RoomCleaningRepository repo;

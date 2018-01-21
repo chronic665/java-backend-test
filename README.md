@@ -1,6 +1,8 @@
 ## Introduction
 
-You will write a service that navigates a imaginary robotic hoover (much like a [Roomba](https://en.wikipedia.org/wiki/Roomba)) through an equally imaginary room based on:
+Cleaning your room has never been easier. Forget old hoover models like like [Roomba](https://en.wikipedia.org/wiki/Roomba). With Edward J. Hoover you're room is finally home to real IoT.
+
+Some rules that your amazing Edward will adhere to:
 
 * room dimensions as [X and Y coordinates](https://en.wikipedia.org/wiki/Cartesian_coordinate_system), identifying the top right corner of the room rectangle. This room is divided up in a grid based on these dimensions; a room that has dimensions X: 5 and Y: 5 has 5 columns and 5 rows, so 25 possible hoover positions. The bottom left corner is the point of origin for our coordinate system, so as the room contains all coordinates its bottom left corner is defined by X: 0 and Y: 0.
 * locations of patches of dirt, also defined by X and Y coordinates identifying the bottom left corner of those grid positions.
@@ -13,16 +15,9 @@ Placing the hoover on a patch of dirt ("hoovering") removes the patch of dirt so
 
 Driving into a wall has no effect (the robot skids in place).
 
-## Goal
-
-The goal of the service is to take the room dimensions, the locations of the dirt patches, the hoover location and the driving instructions as input and to then output the following:
-
-* The final hoover position (X, Y)
-* The number of patches of dirt the robot cleaned up
-
 ## Input
 
-Program input will be received in a json payload with the format described here.
+Program input will be received as a HTTP POST request with a json payload with the format described here.
 
 Example:
 
@@ -38,6 +33,11 @@ Example:
   "instructions" : "NNESEESWNWW"
 }
 ```
+
+```
+
+```
+
 
 ## Output
 

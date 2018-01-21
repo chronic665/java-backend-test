@@ -9,7 +9,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 
 @SpringBootApplication
-public class R2D2Application {
+public class HooverApplication {
 
     @Autowired
     private InputConverter inputConverter;

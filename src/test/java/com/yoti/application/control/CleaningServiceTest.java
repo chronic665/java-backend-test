@@ -3,8 +3,8 @@ package com.yoti.application.control;
 import com.yoti.application.dto.ResultPage;
 import com.yoti.application.entity.*;
 import com.yoti.application.repo.RoomCleaningRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.core.env.Environment;
 
 import javax.inject.Provider;
@@ -30,7 +30,7 @@ public class CleaningServiceTest {
     private Hoover mockHoover;
     private RoomCleaningRepository mockRepo;
 
-    @BeforeEach
+    @Before
     public void setup() {
         mockHoover = mock(Hoover.class, "mockHoover");
         mockRepo = mock(RoomCleaningRepository.class, "mockRepo");
